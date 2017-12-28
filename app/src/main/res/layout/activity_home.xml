@@ -1,0 +1,52 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    >
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="List1"
+        android:textSize="30dp"
+        android:textColor="#ffffff"
+        android:background="#80000000"
+        android:id="@+id/bt1"
+        android:layout_marginTop="1dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/bt2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/bt1"
+        android:layout_marginTop="7dp"
+        android:background="#80000000"
+        android:text="List2"
+        android:textColor="#ffffff"
+        android:textSize="30dp" />
+
+    <Button
+        android:id="@+id/bt3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="#790909"
+        android:text="Favorites"
+        android:textColor="#ffffff"
+        android:textSize="25dp" />
+
+
+
+
+</RelativeLayout>

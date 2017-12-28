@@ -4,50 +4,50 @@ package com.myapplication;
  * Created by Faizan Ahmad on 12/22/2017.
  */
 
-import java.util.List;
-
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
 
 
-public class FavoriteListFragment extends Fragment {
+public class FavoriteListActivty extends Activity {
 
     public static final String ARG_ITEM_ID = "favorite_list";
 
     ListView favoriteList;
     SharedPreference sharedPreference;
     List<Product> favorites;
-
+    private ClipboardManager myClipboard;
+    private ClipData myClip;
     Activity activity;
+
     ProductListAdapter productListAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = getActivity();
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_product_list, container,
-                false);
+        setContentView(R.layout.fvt_list);
+        final TextView mTextView = (TextView) findViewById(R.id.title_text);
+        mTextView.setText("Favorites");
+
+
         // Get favorite items from SharedPreferences.
         sharedPreference = new SharedPreference();
-        favorites = sharedPreference.getFavorites(activity);
+        favorites = sharedPreference.getFavorites(this);
+
 
         if (favorites == null) {
             showAlert(getResources().getString(R.string.no_favorites_items),
@@ -60,9 +60,9 @@ public class FavoriteListFragment extends Fragment {
                         getResources().getString(R.string.no_favorites_msg));
             }
 
-            favoriteList = (ListView) view.findViewById(R.id.list_product);
+            favoriteList = (ListView) findViewById(R.id.list_product);
             if (favorites != null) {
-                productListAdapter = new ProductListAdapter(activity, favorites);
+                productListAdapter = new ProductListAdapter(this, favorites);
                 favoriteList.setAdapter(productListAdapter);
 
                 favoriteList.setOnItemClickListener(new OnItemClickListener() {
@@ -81,31 +81,27 @@ public class FavoriteListFragment extends Fragment {
                                     AdapterView<?> parent, View view,
                                     int position, long id) {
 
-                                ImageView button = (ImageView) view
-                                        .findViewById(R.id.imgbtn_favorite);
+                                ImageView button = (ImageView) findViewById(R.id.imgbtn_favorite);
 
                                 String tag = button.getTag().toString();
                                 if (tag.equalsIgnoreCase("grey")) {
-                                    sharedPreference.addFavorite(activity,
+                                    sharedPreference.addFavorite(FavoriteListActivty.this,
                                             favorites.get(position));
-                                    Toast.makeText(
-                                            activity,
-                                            activity.getResources().getString(
-                                                    R.string.add_favr),
+                                    Toast.makeText(FavoriteListActivty.this,getResources().getString(R.string.add_favr),
                                             Toast.LENGTH_SHORT).show();
 
                                     button.setTag("red");
                                     button.setImageResource(R.drawable.heart_red);
                                 } else {
-                                    sharedPreference.removeFavorite(activity,
+                                    sharedPreference.removeFavorite(FavoriteListActivty.this,
                                             favorites.get(position));
                                     button.setTag("grey");
                                     button.setImageResource(R.drawable.heart_grey);
                                     productListAdapter.remove(favorites
                                             .get(position));
                                     Toast.makeText(
-                                            activity,
-                                            activity.getResources().getString(
+                                            FavoriteListActivty.this,
+                                            getResources().getString(
                                                     R.string.remove_favr),
                                             Toast.LENGTH_SHORT).show();
                                 }
@@ -114,7 +110,7 @@ public class FavoriteListFragment extends Fragment {
                         });
             }
         }
-        return view;
+
     }
 
     public void showAlert(String title, String message) {
@@ -137,12 +133,5 @@ public class FavoriteListFragment extends Fragment {
                     });
             alertDialog.show();
         }
-    }
-
-    @Override
-    public void onResume() {
-        getActivity().setTitle(R.string.favorites);
-        getActivity().getActionBar().setTitle(R.string.favorites);
-        super.onResume();
     }
 }
